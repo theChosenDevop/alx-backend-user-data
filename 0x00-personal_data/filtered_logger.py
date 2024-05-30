@@ -5,6 +5,22 @@ import logging
 from typing import List
 
 
+def filter_datum(fields: List[str], redaction: str, message: str,
+                 separator: str) -> str:
+    """returns the log message obfuscated
+    Argument:
+        fields [List] : list of strings representing all fields to obfuscate
+        redaction [Str] : representing by what the field will be obfuscated
+        message [str] : representing the log line
+        separator [str] : representing by which character is
+                        separating all fields in the log line (message)
+    """
+    pattern = rf"({'|'.join(fields)})=[^{separator }]*"
+    redacted_message = re.sub(
+            pattern, lambda m: f"{m.group(1)}={redaction}", message)
+    return redacted_message.replace(separator, separator + " ")
+
+
 class RedactingFormatter(logging.Formatter):
     """Redacting Formatter class"""
 
@@ -28,19 +44,3 @@ class RedactingFormatter(logging.Formatter):
         filtered = filter_datum(
                 self.fields, self.REDACTION, msg, self.SEPARATOR)
         return filtered
-
-
-def filter_datum(fields: List[str], redaction: str, message: str,
-                 separator: str) -> str:
-    """returns the log message obfuscated
-    Argument:
-       fields [List] : list of strings representing all fields to obfuscate
-       redaction [Str] : representing by what the field will be obfuscated
-       message [str] : representing the log line
-       separator [str] : representing by which character is
-                        separating all fields in the log line (message)
-    """
-    pattern = rf"({'|'.join(fields)})=[^{separator }]*"
-    redacted_message = re.sub(
-            pattern, lambda m: f"{m.group(1)}={redaction}", message)
-    return redacted_message.replace(separator, separator + " ")
