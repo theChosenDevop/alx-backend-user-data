@@ -1,8 +1,30 @@
-#!/usr/bin/env python3
-"""filtered_logger module
-"""
+#!/usr/bin/env python
+"""filtered_logger module"""
 import re
+import logging
 from typing import List
+
+
+class RedactingFormatter(logging.Formatter):
+    """Redacting Formatter class"""
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]) -> str:
+        self.fields = fields
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+
+    def format(self, record: logging.LogRecord) -> str:
+        """returns a formatted log
+        Arguments
+          record [str]: string record
+        """
+        msg = super(RedactingFormatter, self).format(record)
+        filtered = filter_datum(
+                self.fields, self.REDACTION, msg, self.SEPARATOR)
+        return filtered
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
