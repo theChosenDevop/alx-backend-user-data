@@ -24,7 +24,7 @@ class RedactingFormatter(logging.Formatter):
           record [str]: string record
         """
         msg = super(RedactingFormatter, self).format(record)
-
+        
         filtered = filter_datum(
                 self.fields, self.REDACTION, msg, self.SEPARATOR)
         return filtered
@@ -40,7 +40,5 @@ def filter_datum(fields: List[str], redaction: str, message: str,
        separator [str] : representing by which character is
                         separating all fields in the log line (message)
     """
-    pattern = rf"({'|'.join(fields)})=[^{separator }]*"
-    redacted_message = re.sub(
-            pattern, lambda m: f"{m.group(1)}={redaction}", message)
-    return redacted_message.replace(separator, separator + " ")
+    pattern = "({})=[^{}]+".format({'|'.join(fields)})=[^{separator}]*
+    return re.sub(pattern, lambda m: f"{m.group(1)}={redaction}", message)
