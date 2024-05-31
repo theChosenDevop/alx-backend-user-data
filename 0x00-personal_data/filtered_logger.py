@@ -4,6 +4,7 @@ import re
 import logging
 from typing import List
 import mysql.connection
+import os
 
 
 PII_FIELDS = ('name', 'email', 'phonenumber', 'ssn', 'password')
@@ -75,3 +76,19 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
             host=host, user=user, password=pwd, database=db)
 
     return connection
+
+
+ded main():
+    """get user info"""
+    db = get_db()
+    logger = get_logger()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM USERS;")
+    fields = cursor.column_name
+    for row in curaor:
+        msg = "".join("{}={}; ".format(key, value) for key, value
+                      in zip(fields, row))
+        logger.info(message.strip())
+    cursor.close()
+    db.close()
