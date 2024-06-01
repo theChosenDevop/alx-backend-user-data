@@ -10,7 +10,7 @@ from typing import List, Tuple
 PII_FIELDS: Tuple[str] = ('name', 'email', 'phonenumber', 'ssn', 'password')
 
 
-def filter_datum(fields: list, redaction: str, message: str,
+def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     """returns the log message obfuscated
     Argument:
@@ -33,7 +33,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: List[str]):
+    def __init__(self, fields):
         """Initialize Object"""
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
