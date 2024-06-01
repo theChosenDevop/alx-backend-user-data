@@ -49,55 +49,5 @@ class RedactingFormatter(logging.Formatter):
         return filtered
 
 
-def get_logger() -> logging.Logger:
-    """creates a logger object"""
-    logger = logging.getLogger("user_data")
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    handler = logging.StreamHandler()
-    formatter = RedactingFormatter(PII_FIELDS)
-
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-    return logger
-
-
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    """connects user to msql server"""
-    user = os.getenv('PERSONAL_DATA_DB_USERNAME', "root")
-    pwd = os.getenv('PERSONAL_DATA_DB_PASSWORD', "")
-    host = os.getenv('PERSONAL_DATA_DB_HOST', "localhost")
-    db = os.getenv('PERSONAL_DATA_DB_NAME')
-
-    connection = mysql.connector.connect(
-            host=host, user=user, password=pwd, database=db)
-
-    return connection
-
-
-def main():
-    """get user info"""
-    try:
-        db = get_db()
-        logger = get_logger()
-        cursor = db.cursor()
-
-        cursor.execute("SELECT * FROM USERS;")
-        fields = cursor.column_name
-        
-        for row in curaor:
-            msg = "".join("{}={}; ".format(key, value) for key, value
-                          in zip(fields, row))
-            logger.info(message.strip())
-
-    except Exception as e:
-        logger.error(f"An error occured: {str(e)}")
-    finally:
-        cursor.close()
-        db.close()
-
-
 if __name__ == "__main__":
     main()
