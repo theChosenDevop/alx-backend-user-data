@@ -4,9 +4,10 @@ import re
 import logging
 import mysql.connector
 import os
+from typing import List, Tuple
 
 
-PII_FIELDS = ('name', 'email', 'phonenumber', 'ssn', 'password')
+PII_FIELDS: Tuple[str] = ('name', 'email', 'phonenumber', 'ssn', 'password')
 
 
 def filter_datum(fields: list, redaction: str, message: str,
@@ -32,7 +33,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: tuple):
+    def __init__(self, fields: List[str]):
         """Initialize Object"""
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
