@@ -3,7 +3,7 @@
 import re
 import logging
 from typing import List
-import mysql.connection
+import mysql.connector
 import os
 
 
@@ -78,7 +78,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     return connection
 
 
-ded main():
+def main():
     """get user info"""
     db = get_db()
     logger = get_logger()
