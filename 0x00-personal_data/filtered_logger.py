@@ -2,7 +2,6 @@
 """filtered_logger module"""
 import re
 import logging
-from typing import List
 import mysql.connector
 import os
 
@@ -10,7 +9,7 @@ import os
 PII_FIELDS = ('name', 'email', 'phonenumber', 'ssn', 'password')
 
 
-def filter_datum(fields: List[str], redaction: str, message: str,
+def filter_datum(fields: list, redaction: str, message: str,
                  separator: str) -> str:
     """returns the log message obfuscated
     Argument:
@@ -33,7 +32,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields: List[str]) -> str:
+    def __init__(self, fields: tuple):
         """Initialize Object"""
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
@@ -67,9 +66,9 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """connects user to msql server"""
-    user = os.getenv('PERSONAL_DATA_DB_USERNAME') or "root"
-    pwd = os.getenv('PERSONAL_DATA_DB_PASSWORD') or ""
-    host = os.getenv('PERSONAL_DATA_DB_HOST') or "localhost"
+    user = os.getenv('PERSONAL_DATA_DB_USERNAME', "root")
+    pwd = os.getenv('PERSONAL_DATA_DB_PASSWORD', "")
+    host = os.getenv('PERSONAL_DATA_DB_HOST', "localhost")
     db = os.getenv('PERSONAL_DATA_DB_NAME')
 
     connection = mysql.connector.connect(
@@ -80,15 +79,25 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 def main():
     """get user info"""
-    db = get_db()
-    logger = get_logger()
-    cursor = db.cursor()
+    try:
+        db = get_db()
+        logger = get_logger()
+        cursor = db.cursor()
 
-    cursor.execute("SELECT * FROM USERS;")
-    fields = cursor.column_name
-    for row in curaor:
-        msg = "".join("{}={}; ".format(key, value) for key, value
-                      in zip(fields, row))
-        logger.info(message.strip())
-    cursor.close()
-    db.close()
+        cursor.execute("SELECT * FROM USERS;")
+        fields = cursor.column_name
+        
+        for row in curaor:
+            msg = "".join("{}={}; ".format(key, value) for key, value
+                          in zip(fields, row))
+            logger.info(message.strip())
+
+    except Exception as e:
+        logger.error(f"An error occured: {str(e)}")
+    finally:
+        cursor.close()
+        db.close()
+
+
+if __name__ == "__main__":
+    main()
