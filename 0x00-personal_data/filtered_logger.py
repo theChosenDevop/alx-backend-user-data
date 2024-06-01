@@ -7,7 +7,7 @@ import os
 from typing import List, Tuple
 
 
-PII_FIELDS: Tuple[str] = ('name', 'email', 'phonenumber', 'ssn', 'password')
+PII_FIELDS: Tuple[str] = ('name', 'email', 'phone', 'ssn', 'password')
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
@@ -45,6 +45,5 @@ class RedactingFormatter(logging.Formatter):
         """
         msg = super(RedactingFormatter, self).format(record)
 
-        filtered = filter_datum(
-                self.fields, self.REDACTION, msg, self.SEPARATOR)
-        return filtered
+        f_msg = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
+        return f_msg
