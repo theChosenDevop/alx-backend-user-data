@@ -29,14 +29,14 @@ def filter_datum(fields: List[str], redaction: str, message: str,
 class RedactingFormatter(logging.Formatter):
     """Redacting Formatter class"""
 
-    REDACTION = "***"
-    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
-    SEPARATOR = ";"
+    REDACTION: str = "***"
+    FORMAT: str = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR: str = ";"
 
-    def __init__(self, fields: List[str]):
+    def __init__(self, fields: List[str]) -> None:
         """Initialize Object"""
         super(RedactingFormatter, self).__init__(self.FORMAT)
-        self.fields = fields
+        self.fields: List[str] = fields
 
     def format(self, record: logging.LogRecord) -> str:
         """returns a formatted log
