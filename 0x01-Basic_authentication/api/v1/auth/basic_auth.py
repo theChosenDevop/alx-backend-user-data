@@ -2,6 +2,8 @@
 """BasicAuth module"""
 import base64
 from api.v1.auth.auth import Auth
+from typing import TypeVar
+from models.user import User
 
 
 class BasicAuth(Auth):
@@ -52,11 +54,11 @@ class BasicAuth(Auth):
 
     def extract_user_credentials(
             self, decoded_base64_authorization_header: str) -> (str, str):
-        """Decodes base64 string
+        """Extract user credentials
         Args:
             base64_authorization_header [str]: base64 string
         Returns:
-            - decoded value of Base64 string
+            - User details
         """
         if decoded_base64_authorization_header is None:
             return None, None
@@ -67,3 +69,23 @@ class BasicAuth(Auth):
         # split decoded_base64_authorization_header into index
         email, pwd = decoded_base64_authorization_header.split(":")
         return email, pwd
+
+    def user_object_from_credentials(
+            self, user_email: str, user_pwd: str) -> TypeVar('User'):
+        """Returns User instance base on email and password
+        Args:
+            - user_email [str] - input
+            - user_pwd [str] - input
+        """
+        if user_pwd is None or not isinstance(user_pwd, str):
+            return None
+        if user_email is None or not isinstance(user_email, str):
+            return None
+
+        User.load_from_file()
+        users = User.search({'email': user_email})
+        if users is not None:
+            for user in users:
+                if user.is_valid_password(user_pwd):
+                    return user
+        return None
