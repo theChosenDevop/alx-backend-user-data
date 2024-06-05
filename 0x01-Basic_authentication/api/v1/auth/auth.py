@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Auth Module"""
 from flask import request
-from api.v1 import app
 from typing import List, TypeVar
 
 
@@ -19,7 +18,9 @@ class Auth:
         Returns:
           - False if does not require authentication or otherwise True
         """
-        if path is None or excluded_paths is None:
+        if path is None:
+            return True
+        if excluded_paths is None:
             return True
         # ensure path has a trailing slash
         if not path.endswith('/'):
@@ -40,7 +41,7 @@ class Auth:
         """
         if request is None:
             return None
-        if  "Authorization" not in request.headers:
+        if "Authorization" not in request.headers:
             return None
         return request.headers.get("Authorization")
 
