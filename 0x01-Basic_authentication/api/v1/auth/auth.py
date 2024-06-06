@@ -25,15 +25,15 @@ class Auth:
         # ensure path has a trailing slash
         if not path.endswith('/'):
             path += '/'
-        # ensure excluded_paths have a slash
         for excl_path in excluded_paths:
             if not excl_path.endswith('/'):
                 excl_path += '/'
             if excl_path.endswith('*'):
                 if path.startswith(excl_path[:-1]):
                     return False
-            else path == excl_path:
-                return False
+            else:
+                if path == excl_path:
+                    return False
         return True
 
     def authorization_header(self, request=None) -> str:
