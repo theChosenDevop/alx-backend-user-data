@@ -3,12 +3,27 @@
 from flask import request
 from typing import List, TypeVar
 import fnmatch
+from os import getenv
 
 
 class Auth:
     """Auth class"""
     def __init__(self):
         """ïnitialaization of object"""
+
+    def session_cookie(self, request=None):
+        """returns a cookie value from a request
+        Args:
+            request: user request
+        Returns:
+            -  the value of the cookie named _my_session_id from request
+        """
+        if request is None:
+            return None
+        cookie_name = getenv('SESSION_NAME')
+        if cookie_name is None:
+            return None
+        return request.cookies.get(cookie_name)
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """checks if a given path requires authentication
