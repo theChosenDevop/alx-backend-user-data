@@ -2,6 +2,7 @@
 """Auth Module"""
 from flask import request
 from typing import List, TypeVar
+import fnmatch
 
 
 class Auth:
@@ -25,15 +26,11 @@ class Auth:
         # ensure path has a trailing slash
         if not path.endswith('/'):
             path += '/'
-        for excl_path in excluded_paths:
-            if not excl_path.endswith('/'):
-                excl_path += '/'
-            if excl_path.endswith('*'):
-                if path.startswith(excl_path[:-1]):
-                    return False
-            else:
-                if path == excl_path:
-                    return False
+        for x_path in excluded_paths:
+            if not x_path.endswith('/'):
+                x_path += '/'
+            if fnmatch.fnmatch(path, x_path):
+                return False
         return True
 
     def authorization_header(self, request=None) -> str:
