@@ -25,6 +25,8 @@ class Auth:
         # ensure path has a trailing slash
         if not path.endswith('/'):
             path += '/'
+        if excluded_paths.endswith('*'):
+            return False
         # ensure excluded_paths have a slash
         excluded_paths = [
                 route_path if route_path.endswith('/')
