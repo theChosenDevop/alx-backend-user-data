@@ -46,6 +46,8 @@ def before_request() -> str:
     if auth.authorization_header(request) and auth.session_cookie(request):
         return None, abort(401)
     request.current_user = auth.current_user(request)
+    if request.current_user is None:
+        raise abort(403)
 
 
 @app.errorhandler(404)
