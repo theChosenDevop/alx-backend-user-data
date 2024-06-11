@@ -77,3 +77,4 @@ class DB:
             setattr(User, key, value)
 
         session.commit()
+        return None
