@@ -62,3 +62,18 @@ class DB:
             raise NoResultFound()
         except InvalidRequestError:
             raise InvalidRequestError()
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Locate the user to update and update user's attribute
+          Args:
+            user_id [int]: user id
+            kwargs: key : value pair
+          Returns:
+             None
+        """
+        session = self._session
+        user = session.query(User).filter_by(id=user_id).one()
+        for key, value in kwargs.items():
+            setattr(User, key, value)
+
+        session.commit()
