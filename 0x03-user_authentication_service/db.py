@@ -72,9 +72,11 @@ class DB:
              None
         """
         session = self._session
-        user = DB.find_user_by(self, id=user_id)
-        for key, value in kwargs.items():
-            setattr(User, key, value)
-
-        session.commit()
-        return None
+        try:
+            user = DB.find_user_by(self, id=user_id)
+            for key, value in kwargs.items():
+                setattr(User, key, value)
+            session.commit()
+            return None
+        except ValueError:
+            raise ValueError()
