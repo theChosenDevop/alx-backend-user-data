@@ -72,7 +72,7 @@ class DB:
              None
         """
         session = self._session
-        user = session.query(User).filter_by(id=user_id).one()
+        user = DB.find_user_by(self, id=user_id)
         for key, value in kwargs.items():
             setattr(User, key, value)
 
