@@ -82,11 +82,12 @@ class Auth:
             return None
 
     def get_user_from_session_id(session_id: str) -> Union[User, None]:
-        """
+        """returns corresponding user or None if user don't exist
         """
         if session_id is None:
             return None
-        else:
-            storage = self._db
-            user = storage.query(User).find_user_by(session_id)
+        try:
+            user = self._db.find_user_by(session_id=session_id)
             return user
+        except (NoResultFound, InvalidRequestError):
+            return None
