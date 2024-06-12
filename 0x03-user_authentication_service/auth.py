@@ -5,8 +5,7 @@ import bcrypt
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
-
-gen_salt = bcrypt.gensalt(rounds=12)
+from sqlalchemy.exc import InvalidRequestError
 
 
 def _hash_password(password: str) -> bytes:
@@ -16,6 +15,7 @@ def _hash_password(password: str) -> bytes:
       Returns:
           bytes
     """
+    gen_salt = bcrypt.gensalt(rounds=12)
     pwd = password.encode('utf-8')
     return bcrypt.hashpw(pwd, gen_salt)
 
@@ -43,3 +43,18 @@ class Auth:
             hashed_pwd = _hash_password(password)
             new_user = storage.add_user(email, hashed_pwd)
             return new_user
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """Validate user login
+            Args:
+            email [str]: user email
+            password [str]: user password
+            Returns: bool
+        """
+        storage = self._db
+        hashed_pwd = password.encode('utf-8')
+        try:
+            user = storage.find_user_by(email=email)
+            return bcrypt.checkpw(hashed_pwd, user.hashed_password)
+        except (NoResultFound, InvalidRequestError):
+            return False
