@@ -16,7 +16,7 @@ def Home():
 
 
 @app.route('/users', methods=['POST'], strict_slashes=False)
-def register_user():
+def users():
     """Register new users
     """
     email = request.form.get("email")
