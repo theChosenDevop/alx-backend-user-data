@@ -21,11 +21,10 @@ def _hash_password(password: str) -> bytes:
     return bcrypt.hashpw(pwd, gen_salt)
 
 
-def _generate_uuid():
+def _generate_uuid() -> str:
     """Returns a string representation of a new UUID
     """
-    id = uuid.uuid4()
-    return str(id)
+    return str(uuid.uuid4())
 
 
 class Auth:
