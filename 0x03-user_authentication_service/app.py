@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import flask import Flask
-import flask
+"""The App Module"""
+import flask import Flask, jsonify
+
 
 app = Flask(__name__)
 
@@ -9,7 +10,7 @@ app = Flask(__name__)
 def Home():
     """Home page
     """
-    return flask.jsonify({"message": "Bienvenue"})
+    return jsonify({"message": "Bienvenue"})
 
 
 if __name__ == "__main__":
