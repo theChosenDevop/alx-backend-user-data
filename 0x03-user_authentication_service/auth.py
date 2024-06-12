@@ -6,6 +6,7 @@ from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
+from typing import Union
 import uuid
 
 
@@ -79,3 +80,13 @@ class Auth:
             return user.session_id
         except NoResultFound:
             return None
+
+    def get_user_from_session_id(session_id: str) -> Union[User, None]:
+        """
+        """
+        if session_id is None:
+            return None
+        else:
+            storage = AUTH()
+            user = storage.query(User).find_user_by(session_id)
+            return user
