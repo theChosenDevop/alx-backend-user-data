@@ -63,7 +63,7 @@ class DB:
         except InvalidRequestError:
             raise InvalidRequestError()
 
-    def update_user(self, user_id: int, **kwargs) -> None:
+    def update_user(self, user_id: int = None, **kwargs) -> None:
         """Locate the user to update and update user's attribute
           Args:
             user_id [int]: user id
@@ -76,6 +76,6 @@ class DB:
             for key, value in kwargs.items():
                 if hasattr(user, key):
                     setattr(user, key, value)
-            self._session.commit()
         except ValueError:
             raise ValueError()
+        self._session.commit()
