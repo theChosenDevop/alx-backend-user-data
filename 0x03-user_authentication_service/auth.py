@@ -87,6 +87,6 @@ class Auth:
         if session_id is None:
             return None
         else:
-            storage = AUTH()
+            storage = self._db
             user = storage.query(User).find_user_by(session_id)
             return user
