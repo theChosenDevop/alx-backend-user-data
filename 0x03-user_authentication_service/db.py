@@ -76,9 +76,5 @@ class DB:
             if hasattr(user, key):
                 setattr(user, key, value)
             else:
-                raise ValueError("No key {} in user").format(key)
-        try:
-            self._session.commit()
-        except Exception as e:
-            self._session.rollback()
-            raise RuntimeError("failed to commit changes: {}").format(str(e))
+                raise ValueError()
+        self._session.commit()
