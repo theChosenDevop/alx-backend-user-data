@@ -72,10 +72,13 @@ class DB:
              None
         """
         user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError("No key {} in user").format(key)
         try:
-            for key, value in kwargs.items():
-                if hasattr(user, key):
-                    setattr(user, key, value)
-        except ValueError:
-            raise ValueError()
-        self._session.commit()
+            self._session.commit()
+        except Exception as e:
+            self._session.rollback()
+            raise RuntimeError("failed to commit changes: {}").format(str(e))
