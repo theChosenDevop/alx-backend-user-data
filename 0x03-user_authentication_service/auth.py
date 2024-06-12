@@ -38,7 +38,7 @@ class Auth:
            and error user exist
            Args:
               email [str]: user email to be checked on database
-                           password [str]: user password to hashed
+              password [str]: user password to hashed
            Returns: User object
         """
         storage = self._db
@@ -65,3 +65,17 @@ class Auth:
             return bcrypt.checkpw(hashed_pwd, user.hashed_password)
         except (NoResultFound, InvalidRequestError):
             return False
+
+    def create_session(self, email: str) -> str:
+        """checks user email and attach session id to it
+           and stores in storage
+            Args:
+                email [str]: user email
+            Returns: session id
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+            user.session_id = _generate_uuid()
+            return user.session_id
+        except NoResultFound:
+            return None
