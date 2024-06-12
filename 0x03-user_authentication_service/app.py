@@ -6,7 +6,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 
-@app.route('/', method='GET', strict_slashes=False)
+@app.route('/', method=['GET'], strict_slashes=False)
 def Home():
     """Home page
     """
@@ -14,4 +14,4 @@ def Home():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0', port=5000)
