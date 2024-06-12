@@ -75,8 +75,8 @@ class DB:
         try:
             user = DB.find_user_by(self, id=user_id)
             for key, value in kwargs.items():
-                setattr(User, key, value)
+                if hasattr(user, key):
+                    setattr(user, key, value)
             session.commit()
-            return None
         except ValueError:
             raise ValueError()
