@@ -71,12 +71,11 @@ class DB:
           Returns:
              None
         """
-        session = self._session
+        user = self.find_user_by(id=user_id)
         try:
-            user = DB.find_user_by(self, id=user_id)
             for key, value in kwargs.items():
                 if hasattr(user, key):
                     setattr(user, key, value)
-            session.commit()
+            self._session.commit()
         except ValueError:
             raise ValueError()
