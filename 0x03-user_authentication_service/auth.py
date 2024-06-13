@@ -83,6 +83,8 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> Optional[User]:
         """returns corresponding user or None if user don't exist
+           Args:
+                session_id [str]: user session id
         """
         if session_id is None:
             return None
@@ -94,6 +96,8 @@ class Auth:
 
     def destroy_session(self, user_id: str) -> None:
         """updates the corresponding user’s session ID to None
+           Args:
+                user_id [str]: user id
         """
         if user_id is None:
             return None
@@ -102,3 +106,19 @@ class Auth:
             user.session_id = None
         except (NoResultFound, InvalidRequestError):
             return None
+
+    def get_reset_password_token(self, email: str) -> str:
+        """Function resets password token
+           Args:
+                email [str]: user email
+           Returns: reset_token
+        """
+        if email is None:
+            return ("None")
+        storage = self._db
+        try:
+            user = storage.find_user_by(email=email)
+            user.reset_token = _generate_uuid()
+            return user.reset_token
+        except (NoResultFound, InvalidRequestError):
+            raise ValueError()
