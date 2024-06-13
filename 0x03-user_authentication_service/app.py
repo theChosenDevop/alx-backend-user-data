@@ -50,13 +50,14 @@ def login():
 
 @app.route('/sessions', method=['DELETE'], strict_slashesFalse)
 def logout():
+    """Log out user and return to the home page
     """
-    """
-    session_id = request.get(cookies="session_id")
+    session_id = request.cookies.get("session_id")
     try:
         user = self._db.find_user_by(session_id=session_id)
         if user:
-            redirect('/', methods=['GET]', strict_slashes=False))
+            self._db.destroy_session(session_id)
+            return redirect('/')
     except (InvalidRequestError, NoResultFound):
         abort(403)
 
