@@ -123,18 +123,17 @@ class Auth:
         except (NoResultFound, InvalidRequestError):
             raise ValueError()
 
-    def update_password(reset_token: str, password: str) -> None:
+    def update_password(self, reset_token: str, password: str) -> None:
         """Use reset_token to find user and update hashed_password
             Args:
                 reset_token [str]: user reset token
                 password [str]: user password
             Returns: None
         """
-        storage = self._db
         try:
-            user = storage.find_user_by(reset_token=reset_token)
-            hash_password = _hash_password(password)
-            user.hashed_password = hash_password
+            user = self._db.find_user_by(reset_token=reset_token)
+            new_hashed_password = _hash_password(password)
+            user.hashed_password = new_hashed_password
             user.reset_token = None
             return None
         except (NoResultFound, InvalidRequestError):
