@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The App Module"""
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, url_for, redirect
 from auth import Auth
 
 
@@ -48,12 +48,12 @@ def login():
         return response
 
 
-@app.route('/sessions', method=['DELETE'], strict_slashesFalse)
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
 def logout():
     """Log out user and return to the home page
     """
     session_id = request.cookies.get("session_id")
-    user = AUTH.get_user_from_session_id(session_id=session_id)
+    user = AUTH.get_user_from_session_id(session_id)
     if user:
         AUTH.destroy_session(session_id)
         return redirect(url_for('Home'))
