@@ -136,6 +136,6 @@ class Auth:
             hash_password = _hash_password(password)
             user.hashed_password = hash_password
             user.reset_token = None
+            return None
         except (NoResultFound, InvalidRequestError):
             raise ValueError()
-        return None
