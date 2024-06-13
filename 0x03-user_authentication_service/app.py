@@ -53,12 +53,11 @@ def logout():
     """Log out user and return to the home page
     """
     session_id = request.cookies.get("session_id")
-    try:
-        user = self._db.find_user_by(session_id=session_id)
-        if user:
-            self._db.destroy_session(session_id)
-            return redirect('/')
-    except (InvalidRequestError, NoResultFound):
+    user = AUTH.get_user_from_session_id(session_id=session_id)
+    if user:
+        AUTH.destroy_session(session_id)
+        return redirect(url_for('Home'))
+    else:
         abort(403)
 
 
