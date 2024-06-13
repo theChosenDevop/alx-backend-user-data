@@ -48,5 +48,18 @@ def login():
         return response
 
 
+@app.route('/sessions', method=['DELETE'], strict_slashesFalse)
+def logout():
+    """
+    """
+    session_id = request.get(cookies="session_id")
+    try:
+        user = self._db.find_user_by(session_id=session_id)
+        if user:
+            redirect('/', methods=['GET]', strict_slashes=False))
+    except (InvalidRequestError, NoResultFound):
+        abort(403)
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
