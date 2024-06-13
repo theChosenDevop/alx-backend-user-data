@@ -135,5 +135,7 @@ class Auth:
             user = storage.find_user_by(reset_token=reset_token)
             hash_password = _hash_password(password)
             user.hashed_password = hash_password
+            user.reset_token = None
         except (NoResultFound, InvalidRequestError):
             raise ValueError()
+        return None
